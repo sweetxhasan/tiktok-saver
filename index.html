@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIK SAVE - Download TikTok Videos Without Watermark</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: 'Space Grotesk', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .no-radius {
+            border-radius: 0 !important;
+        }
+        
+        .sidebar {
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        
+        .sidebar-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .sidebar-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .video-content {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+        
+        .thumbnail-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+            transition: all 0.4s ease;
+        }
+        
+        .thumbnail-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        
+        .video-player.playing {
+            opacity: 1;
+            z-index: 3;
+        }
+        
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+            z-index: 4;
+        }
+        
+        .play-icon i {
+            font-size: 2rem;
+            color: #667eea;
+            margin-left: 4px;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+        
+        .photo-gallery {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .photo-slider {
+            display: flex;
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        
+        .photo-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+        
+        .photo-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .photo-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .photo-nav.prev {
+            left: 10px;
+        }
+        
+        .photo-nav.next {
+            right: 10px;
+        }
+        
+        .photo-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+        }
+        
+        .photo-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 0;
+            background: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .photo-indicator.active {
+            background: white;
+            transform: scale(1.2);
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .author-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 2px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+        }
+
+        .stat-item i {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-item .count {
+            font-size: 0.875rem;
+            font-weight: 700;
+        }
+
+        .stat-item .label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        .url-input-container {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .url-input-container:focus-within {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .url-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .video-content,
+            .photo-gallery {
+                height: 300px;
+            }
+            
+            .play-icon {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .play-icon i {
+                font-size: 1.8rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0.25rem;
+            }
+            
+            .stat-item {
+                padding: 0.5rem 0.25rem;
+            }
+            
+            .stat-item i {
+                font-size: 0.875rem;
+            }
+            
+            .stat-item .count {
+                font-size: 0.75rem;
+            }
+            
+            .stat-item .label {
+                font-size: 0.625rem;
+            }
+        }
+        
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="glass no-radius sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white flex items-center justify-center no-radius">
+                        <i class="ri-download-cloud-2-line text-xl text-purple-600"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-white">TIK SAVE</h1>
+                </div>
+
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="/" class="text-white/80 hover:text-white font-medium transition-colors">Home</a>
+                    <a href="/features" class="text-white/80 hover:text-white font-medium transition-colors">Features</a>
+                    <a href="/about" class="text-white/80 hover:text-white font-medium transition-colors">About</a>
+                    <a href="/contact" class="text-white/80 hover:text-white font-medium transition-colors">Contact</a>
+                </nav>
+
+                <button class="md:hidden text-white text-2xl" onclick="toggleSidebar()">
+                    <i class="ri-menu-line"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="sidebar-overlay fixed inset-0 bg-black/50 z-50" onclick="toggleSidebar()"></div>
+    <div class="sidebar fixed top-0 right-0 h-full w-80 bg-white z-50 no-radius">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-purple-600 flex items-center justify-center no-radius">
+                        <i class="ri-download-cloud-2-line text-xl text-white"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900">TIK SAVE</h2>
+                </div>
+                <button class="text-gray-500 text-2xl" onclick="toggleSidebar()">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+
+            <nav class="space-y-4">
+                <a href="/" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-colors no-radius">
+                    <i class="ri-home-4-line text-xl"></i>
+                    <span>Home</span>
+                </a>
+                <a href="/features" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-colors no-radius">
+                    <i class="ri-star-line text-xl"></i>
+                    <span>Features</span>
+                </a>
+                <a href="/about" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-colors no-radius">
+                    <i class="ri-information-line text-xl"></i>
+                    <span>About</span>
+                </a>
+                <a href="/contact" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-colors no-radius">
+                    <i class="ri-contacts-line text-xl"></i>
+                    <span>Contact</span>
+                </a>
+            </nav>
+
+            <div class="absolute bottom-6 left-6 right-6">
+                <div class="glass no-radius p-4 text-center">
+                    <p class="text-white text-sm">Download TikTok Videos Without Watermark</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="py-8 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                    Download TikTok Videos
+                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-500">
+                        Without Watermark
+                    </span>
+                </h1>
+                <p class="text-lg text-white/80 mb-6 max-w-2xl mx-auto">
+                    Free TikTok video downloader. Download HD quality videos without watermark in seconds.
+                </p>
+            </div>
+
+            <div class="glass no-radius p-6 md:p-8 mb-8">
+                <div class="mb-6">
+                    <label class="block text-white text-lg font-medium mb-3">
+                        <i class="ri-download-cloud-2-line mr-2"></i>Paste TikTok URL
+                    </label>
+                    
+                    <div class="url-input-container no-radius p-1 mb-3">
+                        <div class="flex items-center">
+                            <input 
+                                type="url" 
+                                id="tiktokUrl"
+                                placeholder="https://www.tiktok.com/@username/video/1234567890"
+                                class="url-input px-4 py-3 text-gray-900 text-base"
+                                enterkeyhint="go"
+                            >
+                        </div>
+                    </div>
+                    
+                    <button 
+                        onclick="processDownload()"
+                        id="downloadBtn"
+                        class="w-full bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-base hover:from-purple-700 hover:to-pink-700 transition-all"
+                    >
+                        <i class="ri-download-cloud-2-line"></i>
+                        Download Now
+                    </button>
+                </div>
+
+                <div id="loading" class="hidden text-center py-6">
+                    <div class="loading-spinner mx-auto mb-4"></div>
+                    <p class="text-white text-lg">Processing your video...</p>
+                </div>
+
+                <div id="error" class="hidden bg-red-50 border border-red-200 p-4 mb-4 no-radius">
+                    <div class="flex items-center gap-3">
+                        <i class="ri-error-warning-line text-red-500 text-xl"></i>
+                        <p class="text-red-800 font-medium" id="errorMessage"></p>
+                    </div>
+                </div>
+
+                <div id="results" class="hidden mt-8">
+                    <div class="bg-white no-radius shadow-2xl">
+                        <div class="media-container">
+                            <div id="videoContent" class="video-content">
+                                <div id="thumbnailContainer" class="thumbnail-container">
+                                    <img 
+                                        id="thumbnailImage" 
+                                        src="" 
+                                        alt="Video Thumbnail"
+                                        class="w-full h-full object-cover"
+                                    >
+                                    <div class="play-icon" onclick="playVideo()">
+                                        <i class="ri-play-fill"></i>
+                                    </div>
+                                </div>
+
+                                <video 
+                                    id="videoPlayer" 
+                                    class="video-player"
+                                    playsinline
+                                    webkit-playsinline
+                                    controls
+                                    onloadeddata="handleVideoLoaded()"
+                                >
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+
+                            <div id="photoGallery" class="photo-gallery">
+                                <div class="photo-slider" id="photoSlider"></div>
+                                <button class="photo-nav prev" onclick="prevPhoto()" id="prevPhotoBtn">
+                                    <i class="ri-arrow-left-s-line"></i>
+                                </button>
+                                <button class="photo-nav next" onclick="nextPhoto()" id="nextPhotoBtn">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                </button>
+                                <div class="photo-indicators" id="photoIndicators"></div>
+                            </div>
+                        </div>
+
+                        <div class="p-6">
+                            <div class="flex items-center gap-4 mb-6">
+                                <img 
+                                    id="authorAvatar" 
+                                    src="" 
+                                    alt="Author"
+                                    class="author-avatar"
+                                    onerror="this.src='https://ui-avatars.com/api/?name=User&background=667eea&color=fff&size=128'"
+                                >
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <h3 class="font-bold text-gray-900 text-lg" id="authorName"></h3>
+                                        <i class="ri-checkbox-circle-fill text-blue-500" id="verifiedBadge" style="display: none;"></i>
+                                    </div>
+                                    <p class="text-gray-600 text-sm" id="authorUsername"></p>
+                                    <p class="text-gray-500 text-sm" id="authorFollowers"></p>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <p class="text-gray-700 leading-relaxed" id="mediaDescription"></p>
+                            </div>
+
+                            <div class="stats-grid mb-6">
+                                <div class="stat-item no-radius text-white text-center">
+                                    <i class="ri-heart-3-fill block"></i>
+                                    <div class="count" id="likesCount">0</div>
+                                    <div class="label">Likes</div>
+                                </div>
+                                <div class="stat-item no-radius text-white text-center">
+                                    <i class="ri-chat-3-fill block"></i>
+                                    <div class="count" id="commentsCount">0</div>
+                                    <div class="label">Comments</div>
+                                </div>
+                                <div class="stat-item no-radius text-white text-center">
+                                    <i class="ri-eye-fill block"></i>
+                                    <div class="count" id="viewsCount">0</div>
+                                    <div class="label">Views</div>
+                                </div>
+                                <div class="stat-item no-radius text-white text-center">
+                                    <i class="ri-share-fill block"></i>
+                                    <div class="count" id="sharesCount">0</div>
+                                    <div class="label">Shares</div>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="font-semibold text-gray-900 mb-4 text-lg">Download Options</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="qualityButtons">
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 p-4 no-radius">
+                                <div class="flex items-center gap-3">
+                                    <i class="ri-music-2-line text-gray-600 text-xl"></i>
+                                    <div>
+                                        <p class="font-medium text-gray-900" id="musicTitle">Original Sound</p>
+                                        <p class="text-gray-600 text-sm" id="musicAuthor">Unknown Artist</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Why Choose TIK SAVE?</h2>
+                <p class="text-lg text-white/80">The best TikTok downloader with premium features</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass no-radius p-6 text-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center mx-auto mb-4 no-radius">
+                        <i class="ri-hd-line text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">HD Quality</h3>
+                    <p class="text-white/70">Download videos in high definition quality without compression</p>
+                </div>
+                <div class="glass no-radius p-6 text-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center mx-auto mb-4 no-radius">
+                        <i class="ri-water-flash-line text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">No Watermark</h3>
+                    <p class="text-white/70">Clean videos without TikTok watermark or logo</p>
+                </div>
+                <div class="glass no-radius p-6 text-center">
+                    <div class="w-16 h-16 bg-gradient-to-r from-orange-400 to-red-500 flex items-center justify-center mx-auto mb-4 no-radius">
+                        <i class="ri-download-cloud-2-line text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Super Fast</h3>
+                    <p class="text-white/70">Lightning fast processing and instant downloads</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="glass no-radius mt-12">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-white flex items-center justify-center no-radius">
+                            <i class="ri-download-cloud-2-line text-2xl text-purple-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">TIK SAVE</h3>
+                    </div>
+                    <p class="text-white/70 mb-6 max-w-md">
+                        The ultimate TikTok video downloader. Download HD videos without watermark for free. Fast, secure, and easy to use.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-lg">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/" class="text-white/70 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="/features" class="text-white/70 hover:text-white transition-colors">Features</a></li>
+                        <li><a href="/about" class="text-white/70 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="/contact" class="text-white/70 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-lg">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="text-white/70 hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-white/60 text-sm mb-4 md:mb-0">
+                    © 2024 TIK SAVE. All rights reserved.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="text-white/60 hover:text-white transition-colors">
+                        <i class="ri-twitter-line text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white/60 hover:text-white transition-colors">
+                        <i class="ri-facebook-line text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white/60 hover:text-white transition-colors">
+                        <i class="ri-instagram-line text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
+
+        document.querySelectorAll('.sidebar a').forEach(link => {
+            link.addEventListener('click', () => {
+                toggleSidebar();
+            });
+        });
+
+        let currentMediaData = null;
+        let currentPhotoIndex = 0;
+        let totalPhotos = 0;
+
+        async function processDownload() {
+            const urlInput = document.getElementById('tiktokUrl');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const results = document.getElementById('results');
+            
+            const tiktokUrl = urlInput.value.trim();
+            
+            if (!tiktokUrl) {
+                showError('Please enter a TikTok URL');
+                return;
+            }
+
+            if (!tiktokUrl.includes('tiktok.com')) {
+                showError('Please enter a valid TikTok URL');
+                return;
+            }
+
+            resetMediaState();
+            error.classList.add('hidden');
+            results.classList.add('hidden');
+            loading.classList.remove('hidden');
+            downloadBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    },
+                    body: JSON.stringify({ url: tiktokUrl })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    currentMediaData = data;
+                    displayResults(data);
+                } else {
+                    showError(data.error || 'Failed to download media');
+                }
+
+            } catch (error) {
+                showError('Network error: ' + error.message);
+            } finally {
+                loading.classList.add('hidden');
+                downloadBtn.disabled = false;
+            }
+        }
+
+        function displayResults(data) {
+            const results = document.getElementById('results');
+            const videoContent = document.getElementById('videoContent');
+            const photoGallery = document.getElementById('photoGallery');
+            const qualityButtons = document.getElementById('qualityButtons');
+            
+            if (data.type === 'photos') {
+                videoContent.style.display = 'none';
+                photoGallery.style.display = 'block';
+                setupPhotoGallery(data.photos.images);
+            } else {
+                videoContent.style.display = 'block';
+                photoGallery.style.display = 'none';
+                setupVideoPlayer(data);
+            }
+            
+            document.getElementById('authorAvatar').src = data.author.avatar;
+            document.getElementById('authorName').textContent = data.author.name;
+            document.getElementById('authorUsername').textContent = '@' + data.author.id;
+            document.getElementById('authorFollowers').textContent = data.author.followers + ' followers';
+            
+            if (data.author.verified) {
+                document.getElementById('verifiedBadge').style.display = 'block';
+            }
+            
+            document.getElementById('mediaDescription').textContent = data.title;
+            document.getElementById('likesCount').textContent = data.stats.likes;
+            document.getElementById('commentsCount').textContent = data.stats.comments;
+            document.getElementById('viewsCount').textContent = data.stats.views;
+            document.getElementById('sharesCount').textContent = data.stats.shares;
+            document.getElementById('musicTitle').textContent = data.music.title;
+            document.getElementById('musicAuthor').textContent = data.music.author;
+            
+            qualityButtons.innerHTML = '';
+            if (data.type === 'photos') {
+                generatePhotoDownloadButtons(data);
+            } else {
+                generateVideoDownloadButtons(data.video.qualities, data.filename);
+            }
+            
+            results.classList.remove('hidden');
+            setTimeout(() => {
+                results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        function setupVideoPlayer(data) {
+            const thumbnailImage = document.getElementById('thumbnailImage');
+            const videoPlayer = document.getElementById('videoPlayer');
+            
+            videoPlayer.classList.remove('playing');
+            thumbnailImage.style.display = 'block';
+            thumbnailImage.style.opacity = '1';
+            
+            if (data.video.cover) {
+                thumbnailImage.src = data.video.cover;
+            }
+            
+            if (data.video.qualities.length > 0) {
+                videoPlayer.src = data.video.qualities[0].url;
+            }
+        }
+
+        function setupPhotoGallery(images) {
+            const photoSlider = document.getElementById('photoSlider');
+            const photoIndicators = document.getElementById('photoIndicators');
+            
+            photoSlider.innerHTML = '';
+            photoIndicators.innerHTML = '';
+            
+            totalPhotos = images.length;
+            currentPhotoIndex = 0;
+            
+            images.forEach((image, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'photo-slide';
+                slide.innerHTML = `<img src="${image.url}" alt="Photo ${index + 1}" loading="lazy">`;
+                photoSlider.appendChild(slide);
+                
+                const indicator = document.createElement('div');
+                indicator.className = `photo-indicator ${index === 0 ? 'active' : ''}`;
+                indicator.onclick = () => goToPhoto(index);
+                photoIndicators.appendChild(indicator);
+            });
+            
+            updatePhotoNavigation();
+        }
+
+        function playVideo() {
+            const thumbnailContainer = document.getElementById('thumbnailContainer');
+            const videoPlayer = document.getElementById('videoPlayer');
+            
+            thumbnailContainer.style.opacity = '0';
+            setTimeout(() => {
+                thumbnailContainer.style.display = 'none';
+                videoPlayer.classList.add('playing');
+                videoPlayer.play().catch(e => console.log('Autoplay failed:', e));
+            }, 400);
+        }
+
+        function handleVideoLoaded() {
+            console.log('Video loaded successfully');
+        }
+
+        function nextPhoto() {
+            if (currentPhotoIndex < totalPhotos - 1) {
+                currentPhotoIndex++;
+                updatePhotoSlider();
+            }
+        }
+
+        function prevPhoto() {
+            if (currentPhotoIndex > 0) {
+                currentPhotoIndex--;
+                updatePhotoSlider();
+            }
+        }
+
+        function goToPhoto(index) {
+            currentPhotoIndex = index;
+            updatePhotoSlider();
+        }
+
+        function updatePhotoSlider() {
+            const photoSlider = document.getElementById('photoSlider');
+            const photoIndicators = document.getElementById('photoIndicators').children;
+            
+            photoSlider.style.transform = `translateX(-${currentPhotoIndex * 100}%)`;
+            
+            Array.from(photoIndicators).forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentPhotoIndex);
+            });
+            
+            updatePhotoNavigation();
+        }
+
+        function updatePhotoNavigation() {
+            document.getElementById('prevPhotoBtn').disabled = currentPhotoIndex === 0;
+            document.getElementById('nextPhotoBtn').disabled = currentPhotoIndex === totalPhotos - 1;
+        }
+
+        function generateVideoDownloadButtons(qualities, filename) {
+            const qualityButtons = document.getElementById('qualityButtons');
+            
+            qualities.forEach(quality => {
+                const button = document.createElement('button');
+                
+                if (quality.type === 'hd') {
+                    button.className = 'bg-gradient-to-r from-green-500 to-blue-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-green-600 hover:to-blue-600 transition-all';
+                    button.innerHTML = `
+                        <i class="ri-hd-line"></i>
+                        ${quality.label}
+                    `;
+                } else {
+                    button.className = 'bg-gradient-to-r from-purple-500 to-pink-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-purple-600 hover:to-pink-600 transition-all';
+                    button.innerHTML = `
+                        <i class="ri-download-cloud-2-line"></i>
+                        ${quality.label}
+                    `;
+                }
+                
+                button.onclick = () => downloadVideo(quality.type, button, filename);
+                qualityButtons.appendChild(button);
+            });
+        }
+
+        function generatePhotoDownloadButtons(data) {
+            const qualityButtons = document.getElementById('qualityButtons');
+            
+            const currentImageBtn = document.createElement('button');
+            currentImageBtn.className = 'bg-gradient-to-r from-pink-500 to-rose-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-pink-600 hover:to-rose-600 transition-all';
+            currentImageBtn.innerHTML = `
+                <i class="ri-image-line"></i>
+                Download This Image
+            `;
+            currentImageBtn.onclick = () => downloadCurrentImage(currentImageBtn, data.filename);
+            qualityButtons.appendChild(currentImageBtn);
+            
+            const allImagesBtn = document.createElement('button');
+            allImagesBtn.className = 'bg-gradient-to-r from-indigo-500 to-purple-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-indigo-600 hover:to-purple-600 transition-all';
+            allImagesBtn.innerHTML = `
+                <i class="ri-folder-download-line"></i>
+                Download All Images (${data.photos.count})
+            `;
+            allImagesBtn.onclick = () => downloadAllImages(allImagesBtn, data.filename);
+            qualityButtons.appendChild(allImagesBtn);
+            
+            if (data.video.video_download) {
+                const videoDownloadBtn = document.createElement('button');
+                videoDownloadBtn.className = 'bg-gradient-to-r from-orange-500 to-red-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-orange-600 hover:to-red-600 transition-all';
+                videoDownloadBtn.innerHTML = `
+                    <i class="ri-video-download-line"></i>
+                    Download Video
+                `;
+                videoDownloadBtn.onclick = () => downloadPhotoPostVideo(videoDownloadBtn, data.filename);
+                qualityButtons.appendChild(videoDownloadBtn);
+            }
+        }
+
+        async function downloadVideo(qualityType, button, filename) {
+            if (!currentMediaData) return;
+            
+            const quality = currentMediaData.video.qualities.find(q => q.type === qualityType);
+            if (!quality) return;
+            
+            button.disabled = true;
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Downloading...';
+            
+            try {
+                const downloadUrl = `/api/direct-download?url=${encodeURIComponent(quality.url)}&quality=${qualityType}&filename=${encodeURIComponent(filename)}`;
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = `${filename}.mp4`;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                
+                setTimeout(() => {
+                    button.disabled = false;
+                    button.innerHTML = originalHTML;
+                    document.body.removeChild(link);
+                    showTemporaryMessage('Download started successfully!', 'success');
+                }, 3000);
+                
+            } catch (error) {
+                button.disabled = false;
+                button.innerHTML = originalHTML;
+                showError('Download failed: ' + error.message);
+            }
+        }
+
+        async function downloadCurrentImage(button, filename) {
+            if (!currentMediaData || currentMediaData.type !== 'photos') return;
+            
+            const currentImage = currentMediaData.photos.images[currentPhotoIndex];
+            if (!currentImage) return;
+            
+            button.disabled = true;
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Downloading...';
+            
+            try {
+                const imageFilename = `${filename}_photo_${currentPhotoIndex + 1}`;
+                const downloadUrl = `/api/direct-download?url=${encodeURIComponent(currentImage.url)}&type=image&filename=${encodeURIComponent(imageFilename)}`;
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = `${imageFilename}.jpg`;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                
+                setTimeout(() => {
+                    button.disabled = false;
+                    button.innerHTML = originalHTML;
+                    document.body.removeChild(link);
+                    showTemporaryMessage('Image download started!', 'success');
+                }, 3000);
+                
+            } catch (error) {
+                button.disabled = false;
+                button.innerHTML = originalHTML;
+                showError('Download failed: ' + error.message);
+            }
+        }
+
+        async function downloadAllImages(button, filename) {
+            if (!currentMediaData || currentMediaData.type !== 'photos') return;
+            
+            button.disabled = true;
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Downloading...';
+            
+            try {
+                const imageUrls = currentMediaData.photos.all_images_urls;
+                const downloadUrl = `/api/download-all-images?urls=${encodeURIComponent(JSON.stringify(imageUrls))}&filename=${encodeURIComponent(filename + '_all_images')}`;
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = `${filename}_all_images.zip`;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                
+                setTimeout(() => {
+                    button.disabled = false;
+                    button.innerHTML = originalHTML;
+                    document.body.removeChild(link);
+                    showTemporaryMessage('Downloading all images!', 'success');
+                }, 3000);
+                
+            } catch (error) {
+                button.disabled = false;
+                button.innerHTML = originalHTML;
+                showError('Download failed: ' + error.message);
+            }
+        }
+
+        async function downloadPhotoPostVideo(button, filename) {
+            if (!currentMediaData || currentMediaData.type !== 'photos') return;
+            
+            button.disabled = true;
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<i class="ri-loader-4-line animate-spin"></i> Downloading...';
+            
+            try {
+                const videoUrl = currentMediaData.video.video_download.hd;
+                const videoFilename = `${filename}_video`;
+                const downloadUrl = `/api/direct-download?url=${encodeURIComponent(videoUrl)}&quality=hd&filename=${encodeURIComponent(videoFilename)}`;
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = `${videoFilename}.mp4`;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                
+                setTimeout(() => {
+                    button.disabled = false;
+                    button.innerHTML = originalHTML;
+                    document.body.removeChild(link);
+                    showTemporaryMessage('Video download started!', 'success');
+                }, 3000);
+                
+            } catch (error) {
+                button.disabled = false;
+                button.innerHTML = originalHTML;
+                showError('Download failed: ' + error.message);
+            }
+        }
+
+        function resetMediaState() {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const thumbnailContainer = document.getElementById('thumbnailContainer');
+            
+            if (videoPlayer) {
+                videoPlayer.pause();
+                videoPlayer.currentTime = 0;
+                videoPlayer.classList.remove('playing');
+                videoPlayer.src = '';
+            }
+            
+            if (thumbnailContainer) {
+                thumbnailContainer.style.display = 'block';
+                thumbnailContainer.style.opacity = '1';
+            }
+        }
+
+        function showTemporaryMessage(message, type) {
+            const tempDiv = document.createElement('div');
+            tempDiv.className = `fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 text-white font-semibold no-radius ${
+                type === 'success' ? 'bg-green-500' : 'bg-red-500'
+            }`;
+            tempDiv.textContent = message;
+            document.body.appendChild(tempDiv);
+            
+            setTimeout(() => {
+                document.body.removeChild(tempDiv);
+            }, 3000);
+        }
+
+        function showError(message) {
+            const error = document.getElementById('error');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            errorMessage.textContent = message;
+            error.classList.remove('hidden');
+        }
+
+        document.getElementById('tiktokUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processDownload();
+            }
+        });
+
+        let touchStartX = 0;
+        document.getElementById('photoGallery').addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        document.getElementById('photoGallery').addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) nextPhoto();
+                else prevPhoto();
+            }
+        });
+    </script>
+</body>
+</html>
