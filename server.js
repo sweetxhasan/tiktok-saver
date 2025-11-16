@@ -9,15 +9,14 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('.'));
+app.use(express.static(__dirname));
 
 // User Agents for rotation
 const userAgents = [
     'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
     'Mozilla/5.0 (Linux; Android 13; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
-    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
 ];
 
 // TikTok Downloader Class
@@ -314,7 +313,16 @@ app.get('/api/download-all-images', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`🚀 TIK SAVE Website Started on port ${PORT}!`);
-    console.log(`📱 Visit: http://localhost:${PORT}`);
+// Health check route
+app.get('/health', (req, res) => {
+    res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
+
+module.exports = app;
+
+// Only listen if not in Vercel environment
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`🚀 TIK SAVE Website Started on port ${PORT}!`);
+    });
+                      }
