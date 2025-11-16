@@ -203,7 +203,7 @@ class TikTokDownloader {
 
 const downloader = new TikTokDownloader();
 
-// Routes
+// Serve static HTML files
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -318,11 +318,5 @@ app.get('/health', (req, res) => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+// Export for Vercel
 module.exports = app;
-
-// Only listen if not in Vercel environment
-if (require.main === module) {
-    app.listen(PORT, () => {
-        console.log(`🚀 TIK SAVE Website Started on port ${PORT}!`);
-    });
-                      }
