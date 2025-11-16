@@ -51,10 +51,18 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
+        /* PERFECT MEDIA CONTAINER */
+        .media-container {
+            position: relative;
+            width: 100%;
+            background: #000;
+            overflow: hidden;
+        }
+        
         .video-content {
             position: relative;
             width: 100%;
-            height: 400px;
+            height: 500px; /* Perfect height */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -96,13 +104,14 @@
             z-index: 3;
         }
         
+        /* PERFECT PLAY BUTTON */
         .play-icon {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 50%;
             display: flex;
@@ -111,32 +120,45 @@
             transition: all 0.3s ease;
             animation: pulse 2s infinite;
             z-index: 4;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
         
         .play-icon i {
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: #667eea;
-            margin-left: 4px;
+            margin-left: 6px;
         }
         
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+            0% { 
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); 
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+            70% { 
+                box-shadow: 0 0 0 25px rgba(255, 255, 255, 0); 
+            }
+            100% { 
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); 
+            }
         }
         
+        /* PERFECT PHOTO GALLERY */
         .photo-gallery {
             display: none;
             position: relative;
             width: 100%;
-            height: 400px;
+            height: 500px; /* Same as video */
             overflow: hidden;
             background: #000;
         }
         
         .photo-slider {
             display: flex;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             height: 100%;
         }
         
@@ -153,6 +175,11 @@
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .photo-slide img:hover {
+            transform: scale(1.02);
         }
         
         .photo-nav {
@@ -161,45 +188,53 @@
             transform: translateY(-50%);
             background: rgba(255, 255, 255, 0.9);
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 0;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .photo-nav:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-50%) scale(1.1);
         }
         
         .photo-nav.prev {
-            left: 10px;
+            left: 20px;
         }
         
         .photo-nav.next {
-            right: 10px;
+            right: 20px;
         }
         
         .photo-indicators {
             position: absolute;
-            bottom: 15px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 6px;
+            gap: 8px;
             z-index: 10;
         }
         
         .photo-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 0;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
             background: rgba(255, 255, 255, 0.5);
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .photo-indicator.active {
             background: white;
-            transform: scale(1.2);
+            transform: scale(1.3);
         }
         
         .loading-spinner {
@@ -216,14 +251,32 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* BEAUTIFUL AUTHOR AVATAR */
         .author-avatar {
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid white;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 2px;
+            border: 4px solid transparent;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            padding: 3px;
+            animation: gradientShift 3s ease infinite;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .author-avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
         }
 
         .stats-grid {
@@ -234,17 +287,23 @@
 
         .stat-item {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 0.75rem 0.5rem;
+            padding: 1rem 0.5rem;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
 
         .stat-item i {
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
         }
 
         .stat-item .count {
-            font-size: 0.875rem;
+            font-size: 1rem;
             font-weight: 700;
         }
 
@@ -253,15 +312,18 @@
             opacity: 0.9;
         }
 
+        /* BEAUTIFUL URL INPUT */
         .url-input-container {
             background: rgba(255, 255, 255, 0.95);
             border: 2px solid rgba(255, 255, 255, 0.3);
             transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .url-input-container:focus-within {
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
         }
 
         .url-input {
@@ -269,13 +331,50 @@
             border: none;
             outline: none;
             width: 100%;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            padding: 1rem;
+            color: #2d3748;
+        }
+
+        .url-input::placeholder {
+            color: #a0aec0;
+            font-weight: 500;
+        }
+
+        /* READ MORE SYSTEM */
+        .description {
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+        
+        .description.expanded {
+            -webkit-line-clamp: unset;
+            overflow: visible;
+        }
+        
+        .read-more-btn {
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .read-more-btn:hover {
+            color: #5a67d8;
+            transform: translateX(4px);
         }
 
         @media (max-width: 768px) {
             .video-content,
             .photo-gallery {
-                height: 300px;
+                height: 350px;
             }
             
             .play-icon {
@@ -284,7 +383,17 @@
             }
             
             .play-icon i {
-                font-size: 1.8rem;
+                font-size: 2rem;
+            }
+            
+            .photo-nav {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .author-avatar {
+                width: 60px;
+                height: 60px;
             }
             
             .stats-grid {
@@ -293,19 +402,15 @@
             }
             
             .stat-item {
-                padding: 0.5rem 0.25rem;
+                padding: 0.75rem 0.25rem;
             }
             
             .stat-item i {
-                font-size: 0.875rem;
+                font-size: 1rem;
             }
             
             .stat-item .count {
-                font-size: 0.75rem;
-            }
-            
-            .stat-item .label {
-                font-size: 0.625rem;
+                font-size: 0.875rem;
             }
         }
         
@@ -315,6 +420,7 @@
     </style>
 </head>
 <body class="min-h-screen">
+    <!-- Header -->
     <header class="glass no-radius sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3">
             <div class="flex items-center justify-between">
@@ -339,6 +445,7 @@
         </div>
     </header>
 
+    <!-- Sidebar -->
     <div class="sidebar-overlay fixed inset-0 bg-black/50 z-50" onclick="toggleSidebar()"></div>
     <div class="sidebar fixed top-0 right-0 h-full w-80 bg-white z-50 no-radius">
         <div class="p-6">
@@ -381,9 +488,10 @@
         </div>
     </div>
 
-    <section class="py-8 px-4">
+    <!-- TOOL SECTION -->
+    <section class="py-12 px-4">
         <div class="container mx-auto max-w-4xl">
-            <div class="text-center mb-8">
+            <div class="text-center mb-12">
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
                     Download TikTok Videos
                     <span class="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-500">
@@ -395,19 +503,20 @@
                 </p>
             </div>
 
-            <div class="glass no-radius p-6 md:p-8 mb-8">
+            <!-- Download Tool -->
+            <div class="glass no-radius p-8 mb-8">
                 <div class="mb-6">
-                    <label class="block text-white text-lg font-medium mb-3">
-                        <i class="ri-download-cloud-2-line mr-2"></i>Paste TikTok URL
+                    <label class="block text-white text-lg font-medium mb-4">
+                        <i class="ri-download-cloud-2-line mr-2"></i>Paste TikTok Video URL
                     </label>
                     
-                    <div class="url-input-container no-radius p-1 mb-3">
+                    <div class="url-input-container no-radius p-1 mb-4">
                         <div class="flex items-center">
                             <input 
                                 type="url" 
                                 id="tiktokUrl"
-                                placeholder="https://www.tiktok.com/@username/video/1234567890"
-                                class="url-input px-4 py-3 text-gray-900 text-base"
+                                placeholder="Enter any tiktok video url..."
+                                class="url-input px-4 py-4 text-gray-900 text-base"
                                 enterkeyhint="go"
                             >
                         </div>
@@ -416,125 +525,144 @@
                     <button 
                         onclick="processDownload()"
                         id="downloadBtn"
-                        class="w-full bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-base hover:from-purple-700 hover:to-pink-700 transition-all"
+                        class="w-full bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-[1.02]"
                     >
                         <i class="ri-download-cloud-2-line"></i>
                         Download Now
                     </button>
                 </div>
 
-                <div id="loading" class="hidden text-center py-6">
+                <!-- Loading State -->
+                <div id="loading" class="hidden text-center py-8">
                     <div class="loading-spinner mx-auto mb-4"></div>
                     <p class="text-white text-lg">Processing your video...</p>
                 </div>
 
+                <!-- Error State -->
                 <div id="error" class="hidden bg-red-50 border border-red-200 p-4 mb-4 no-radius">
                     <div class="flex items-center gap-3">
                         <i class="ri-error-warning-line text-red-500 text-xl"></i>
                         <p class="text-red-800 font-medium" id="errorMessage"></p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
 
-                <div id="results" class="hidden mt-0">
-                    <div class="bg-white no-radius shadow-2xl">
-                        <div class="media-container">
-                            <div id="videoContent" class="video-content">
-                                <div id="thumbnailContainer" class="thumbnail-container">
-                                    <img 
-                                        id="thumbnailImage" 
-                                        src="" 
-                                        alt="Video Thumbnail"
-                                        class="w-full h-full object-cover"
-                                    >
-                                    <div class="play-icon" onclick="playVideo()">
-                                        <i class="ri-play-fill"></i>
-                                    </div>
-                                </div>
-
-                                <video 
-                                    id="videoPlayer" 
-                                    class="video-player"
-                                    playsinline
-                                    webkit-playsinline
-                                    controls
-                                    onloadeddata="handleVideoLoaded()"
-                                >
-                                    Your browser does not support the video tag.
-                                </video>
-                            </div>
-
-                            <div id="photoGallery" class="photo-gallery">
-                                <div class="photo-slider" id="photoSlider"></div>
-                                <button class="photo-nav prev" onclick="prevPhoto()" id="prevPhotoBtn">
-                                    <i class="ri-arrow-left-s-line"></i>
-                                </button>
-                                <button class="photo-nav next" onclick="nextPhoto()" id="nextPhotoBtn">
-                                    <i class="ri-arrow-right-s-line"></i>
-                                </button>
-                                <div class="photo-indicators" id="photoIndicators"></div>
+    <!-- RESULTS SECTION (Separate but below tool) -->
+    <section id="results" class="hidden py-0 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="bg-white no-radius shadow-2xl">
+                <!-- Media Container -->
+                <div class="media-container">
+                    <!-- Video Content -->
+                    <div id="videoContent" class="video-content">
+                        <div id="thumbnailContainer" class="thumbnail-container">
+                            <img 
+                                id="thumbnailImage" 
+                                src="" 
+                                alt="Video Thumbnail"
+                                class="w-full h-full object-cover"
+                            >
+                            <div class="play-icon" onclick="playVideo()">
+                                <i class="ri-play-fill"></i>
                             </div>
                         </div>
 
-                        <div class="p-6">
-                            <div class="flex items-center gap-4 mb-6">
-                                <img 
-                                    id="authorAvatar" 
-                                    src="" 
-                                    alt="Author"
-                                    class="author-avatar"
-                                    onerror="this.src='https://ui-avatars.com/api/?name=User&background=667eea&color=fff&size=128'"
-                                >
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <h3 class="font-bold text-gray-900 text-lg" id="authorName"></h3>
-                                        <i class="ri-checkbox-circle-fill text-blue-500" id="verifiedBadge" style="display: none;"></i>
-                                    </div>
-                                    <p class="text-gray-600 text-sm" id="authorUsername"></p>
-                                    <p class="text-gray-500 text-sm" id="authorFollowers"></p>
-                                </div>
-                            </div>
+                        <video 
+                            id="videoPlayer" 
+                            class="video-player"
+                            playsinline
+                            webkit-playsinline
+                            controls
+                            onloadeddata="handleVideoLoaded()"
+                        >
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
 
-                            <div class="mb-6">
-                                <p class="text-gray-700 leading-relaxed" id="mediaDescription"></p>
-                            </div>
+                    <!-- Photo Gallery -->
+                    <div id="photoGallery" class="photo-gallery">
+                        <div class="photo-slider" id="photoSlider"></div>
+                        <button class="photo-nav prev" onclick="prevPhoto()" id="prevPhotoBtn">
+                            <i class="ri-arrow-left-s-line"></i>
+                        </button>
+                        <button class="photo-nav next" onclick="nextPhoto()" id="nextPhotoBtn">
+                            <i class="ri-arrow-right-s-line"></i>
+                        </button>
+                        <div class="photo-indicators" id="photoIndicators"></div>
+                    </div>
+                </div>
 
-                            <div class="stats-grid mb-6">
-                                <div class="stat-item no-radius text-white text-center">
-                                    <i class="ri-heart-3-fill block"></i>
-                                    <div class="count" id="likesCount">0</div>
-                                    <div class="label">Likes</div>
-                                </div>
-                                <div class="stat-item no-radius text-white text-center">
-                                    <i class="ri-chat-3-fill block"></i>
-                                    <div class="count" id="commentsCount">0</div>
-                                    <div class="label">Comments</div>
-                                </div>
-                                <div class="stat-item no-radius text-white text-center">
-                                    <i class="ri-eye-fill block"></i>
-                                    <div class="count" id="viewsCount">0</div>
-                                    <div class="label">Views</div>
-                                </div>
-                                <div class="stat-item no-radius text-white text-center">
-                                    <i class="ri-share-fill block"></i>
-                                    <div class="count" id="sharesCount">0</div>
-                                    <div class="label">Shares</div>
-                                </div>
+                <!-- Media Info -->
+                <div class="p-6">
+                    <!-- Author Info -->
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="author-avatar">
+                            <img 
+                                id="authorAvatar" 
+                                src="" 
+                                alt="Author"
+                                class="author-avatar-inner"
+                                onerror="this.src='https://ui-avatars.com/api/?name=User&background=667eea&color=fff&size=128'"
+                            >
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <h3 class="font-bold text-gray-900 text-lg" id="authorName"></h3>
+                                <i class="ri-checkbox-circle-fill text-blue-500" id="verifiedBadge" style="display: none;"></i>
                             </div>
+                            <p class="text-gray-600 text-sm" id="authorUsername"></p>
+                            <p class="text-gray-500 text-sm" id="authorFollowers"></p>
+                        </div>
+                    </div>
 
-                            <div class="mb-6">
-                                <h4 class="font-semibold text-gray-900 mb-4 text-lg">Download Options</h4>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="qualityButtons">
-                                </div>
-                            </div>
+                    <!-- Description with Read More -->
+                    <div class="mb-6">
+                        <div id="mediaDescription" class="description text-gray-700 leading-relaxed">
+                        </div>
+                        <span id="readMoreBtn" class="read-more-btn" onclick="toggleDescription()" style="display: none;">more</span>
+                    </div>
 
-                            <div class="bg-gray-50 p-4 no-radius">
-                                <div class="flex items-center gap-3">
-                                    <i class="ri-music-2-line text-gray-600 text-xl"></i>
-                                    <div>
-                                        <p class="font-medium text-gray-900" id="musicTitle">Original Sound</p>
-                                        <p class="text-gray-600 text-sm" id="musicAuthor">Unknown Artist</p>
-                                    </div>
-                                </div>
+                    <!-- Stats -->
+                    <div class="stats-grid mb-6">
+                        <div class="stat-item no-radius text-white text-center">
+                            <i class="ri-heart-3-fill block"></i>
+                            <div class="count" id="likesCount">0</div>
+                            <div class="label">Likes</div>
+                        </div>
+                        <div class="stat-item no-radius text-white text-center">
+                            <i class="ri-chat-3-fill block"></i>
+                            <div class="count" id="commentsCount">0</div>
+                            <div class="label">Comments</div>
+                        </div>
+                        <div class="stat-item no-radius text-white text-center">
+                            <i class="ri-eye-fill block"></i>
+                            <div class="count" id="viewsCount">0</div>
+                            <div class="label">Views</div>
+                        </div>
+                        <div class="stat-item no-radius text-white text-center">
+                            <i class="ri-share-fill block"></i>
+                            <div class="count" id="sharesCount">0</div>
+                            <div class="label">Shares</div>
+                        </div>
+                    </div>
+
+                    <!-- Download Buttons -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-900 mb-4 text-lg">Download Options</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="qualityButtons">
+                            <!-- Buttons will be generated here -->
+                        </div>
+                    </div>
+
+                    <!-- Music Info -->
+                    <div class="bg-gray-50 p-4 no-radius">
+                        <div class="flex items-center gap-3">
+                            <i class="ri-music-2-line text-gray-600 text-xl"></i>
+                            <div>
+                                <p class="font-medium text-gray-900" id="musicTitle">Original Sound</p>
+                                <p class="text-gray-600 text-sm" id="musicAuthor">Unknown Artist</p>
                             </div>
                         </div>
                     </div>
@@ -543,7 +671,8 @@
         </div>
     </section>
 
-    <section class="py-12 px-4">
+    <!-- Features Section -->
+    <section class="py-16 px-4">
         <div class="container mx-auto max-w-4xl">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Why Choose TIK SAVE?</h2>
@@ -570,12 +699,13 @@
                         <i class="ri-download-cloud-2-line text-2xl text-white"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-2">Super Fast</h3>
-                    <p class="text-white/70">Lightning fast processing and instant downloads</p>
+                    <p class="text-white/70">Lightning fast processing with 150+ user agents</p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="glass no-radius mt-12">
         <div class="container mx-auto px-4 py-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -648,6 +778,7 @@
         let currentMediaData = null;
         let currentPhotoIndex = 0;
         let totalPhotos = 0;
+        let isDescriptionExpanded = false;
 
         async function processDownload() {
             const urlInput = document.getElementById('tiktokUrl');
@@ -726,7 +857,8 @@
                 document.getElementById('verifiedBadge').style.display = 'block';
             }
             
-            document.getElementById('mediaDescription').textContent = data.title;
+            setupDescription(data.title);
+            
             document.getElementById('likesCount').textContent = data.stats.likes;
             document.getElementById('commentsCount').textContent = data.stats.comments;
             document.getElementById('viewsCount').textContent = data.stats.views;
@@ -789,6 +921,42 @@
             updatePhotoNavigation();
         }
 
+        function setupDescription(text) {
+            const descriptionElement = document.getElementById('mediaDescription');
+            const readMoreBtn = document.getElementById('readMoreBtn');
+            
+            descriptionElement.textContent = text;
+            descriptionElement.classList.remove('expanded');
+            readMoreBtn.style.display = 'none';
+            isDescriptionExpanded = false;
+            
+            // Check if text needs read more
+            setTimeout(() => {
+                const lineHeight = parseInt(getComputedStyle(descriptionElement).lineHeight);
+                const maxHeight = lineHeight * 4; // 4 lines
+                
+                if (descriptionElement.scrollHeight > maxHeight) {
+                    readMoreBtn.style.display = 'block';
+                    readMoreBtn.textContent = 'more';
+                }
+            }, 100);
+        }
+
+        function toggleDescription() {
+            const descriptionElement = document.getElementById('mediaDescription');
+            const readMoreBtn = document.getElementById('readMoreBtn');
+            
+            isDescriptionExpanded = !isDescriptionExpanded;
+            
+            if (isDescriptionExpanded) {
+                descriptionElement.classList.add('expanded');
+                readMoreBtn.textContent = 'less';
+            } else {
+                descriptionElement.classList.remove('expanded');
+                readMoreBtn.textContent = 'more';
+            }
+        }
+
         function playVideo() {
             const thumbnailContainer = document.getElementById('thumbnailContainer');
             const videoPlayer = document.getElementById('videoPlayer');
@@ -849,13 +1017,13 @@
                 const button = document.createElement('button');
                 
                 if (quality.type === 'hd') {
-                    button.className = 'bg-gradient-to-r from-green-500 to-blue-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-green-600 hover:to-blue-600 transition-all';
+                    button.className = 'bg-gradient-to-r from-green-500 to-blue-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-green-600 hover:to-blue-600 transition-all transform hover:scale-[1.02]';
                     button.innerHTML = `
                         <i class="ri-hd-line"></i>
                         ${quality.label}
                     `;
                 } else {
-                    button.className = 'bg-gradient-to-r from-purple-500 to-pink-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-purple-600 hover:to-pink-600 transition-all';
+                    button.className = 'bg-gradient-to-r from-purple-500 to-pink-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-purple-600 hover:to-pink-600 transition-all transform hover:scale-[1.02]';
                     button.innerHTML = `
                         <i class="ri-download-cloud-2-line"></i>
                         ${quality.label}
@@ -871,7 +1039,7 @@
             const qualityButtons = document.getElementById('qualityButtons');
             
             const currentImageBtn = document.createElement('button');
-            currentImageBtn.className = 'bg-gradient-to-r from-pink-500 to-rose-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-pink-600 hover:to-rose-600 transition-all';
+            currentImageBtn.className = 'bg-gradient-to-r from-pink-500 to-rose-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-pink-600 hover:to-rose-600 transition-all transform hover:scale-[1.02]';
             currentImageBtn.innerHTML = `
                 <i class="ri-image-line"></i>
                 Download This Image
@@ -880,7 +1048,7 @@
             qualityButtons.appendChild(currentImageBtn);
             
             const allImagesBtn = document.createElement('button');
-            allImagesBtn.className = 'bg-gradient-to-r from-indigo-500 to-purple-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-indigo-600 hover:to-purple-600 transition-all';
+            allImagesBtn.className = 'bg-gradient-to-r from-indigo-500 to-purple-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-indigo-600 hover:to-purple-600 transition-all transform hover:scale-[1.02]';
             allImagesBtn.innerHTML = `
                 <i class="ri-folder-download-line"></i>
                 Download All Images (${data.photos.count})
@@ -890,7 +1058,7 @@
             
             if (data.video.video_download) {
                 const videoDownloadBtn = document.createElement('button');
-                videoDownloadBtn.className = 'bg-gradient-to-r from-orange-500 to-red-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-orange-600 hover:to-red-600 transition-all';
+                videoDownloadBtn.className = 'bg-gradient-to-r from-orange-500 to-red-500 w-full py-4 text-white font-semibold no-radius flex items-center justify-center gap-2 text-lg hover:from-orange-600 hover:to-red-600 transition-all transform hover:scale-[1.02]';
                 videoDownloadBtn.innerHTML = `
                     <i class="ri-video-download-line"></i>
                     Download Video
