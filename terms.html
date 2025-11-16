@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - TIK SAVE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        * { font-family: 'Space Grotesk', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .no-radius { border-radius: 0 !important; }
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .sidebar { transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar.open { transform: translateX(0); }
+        .sidebar-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .sidebar-overlay.open { opacity: 1; pointer-events: all; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="glass no-radius sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white flex items-center justify-center no-radius">
+                        <i class="ri-download-cloud-2-line text-xl text-purple-600"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold text-white">TIK SAVE</h1>
+                </div>
+                <button class="md:hidden text-white text-2xl" onclick="toggleSidebar()">
+                    <i class="ri-menu-line"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="sidebar-overlay fixed inset-0 bg-black/50 z-50" onclick="toggleSidebar()"></div>
+    <div class="sidebar fixed top-0 right-0 h-full w-80 bg-white z-50 no-radius">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-purple-600 flex items-center justify-center no-radius">
+                        <i class="ri-download-cloud-2-line text-xl text-white"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900">TIK SAVE</h2>
+                </div>
+                <button class="text-gray-500 text-2xl" onclick="toggleSidebar()">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <nav class="space-y-4">
+                <a href="/" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-colors no-radius">
+                    <i class="ri-home-4-line text-xl"></i><span>Home</span>
+                </a>
+                <a href="/features" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-colors no-radius">
+                    <i class="ri-star-line text-xl"></i><span>Features</span>
+                </a>
+                <a href="/about" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-colors no-radius">
+                    <i class="ri-information-line text-xl"></i><span>About</span>
+                </a>
+                <a href="/contact" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-colors no-radius">
+                    <i class="ri-contacts-line text-xl"></i><span>Contact</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <section class="py-12 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Terms of Service</h1>
+                <p class="text-lg text-white/80">Last updated: December 2024</p>
+            </div>
+
+            <div class="glass no-radius p-8">
+                <div class="prose prose-invert max-w-none">
+                    <h2 class="text-2xl font-bold text-white mb-4">1. Acceptance of Terms</h2>
+                    <p class="text-white/70 mb-6">
+                        By accessing and using TIK SAVE, you accept and agree to be bound by the terms and provision of this agreement.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-white mb-4">2. Use License</h2>
+                    <p class="text-white/70 mb-6">
+                        Permission is granted to temporarily use TIK SAVE for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-white mb-4">3. Disclaimer</h2>
+                    <p class="text-white/70 mb-6">
+                        The materials on TIK SAVE are provided on an 'as is' basis. TIK SAVE makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-white mb-4">4. Limitations</h2>
+                    <p class="text-white/70 mb-6">
+                        In no event shall TIK SAVE or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on TIK SAVE.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-white mb-4">5. Accuracy of Materials</h2>
+                    <p class="text-white/70 mb-6">
+                        The materials appearing on TIK SAVE could include technical, typographical, or photographic errors. TIK SAVE does not warrant that any of the materials on its website are accurate, complete or current.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-white mb-4">6. Links</h2>
+                    <p class="text-white/70 mb-6">
+                        TIK SAVE has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by TIK SAVE of the site.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-white mb-4">7. Modifications</h2>
+                    <p class="text-white/70 mb-6">
+                        TIK SAVE may revise these terms of service for its website at any time without notice. By using this website you are agreeing to be bound by the then current version of these terms of service.
+                    </p>
+
+                    <h2 class="text-2xl font-bold text-white mb-4">8. Governing Law</h2>
+                    <p class="text-white/70">
+                        These terms and conditions are governed by and construed in accordance with the laws and you irrevocably submit to the exclusive jurisdiction of the courts in that location.
+                    </p>
+                </div>
+
+                <div class="mt-8 p-6 bg-white/10 border border-white/20">
+                    <h3 class="text-xl font-bold text-white mb-2">Contact Information</h3>
+                    <p class="text-white/70">
+                        If you have any questions about these Terms of Service, please contact us through our <a href="/contact" class="text-purple-300 hover:text-purple-200 underline">contact page</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="glass no-radius mt-12">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-white flex items-center justify-center no-radius">
+                            <i class="ri-download-cloud-2-line text-2xl text-purple-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">TIK SAVE</h3>
+                    </div>
+                    <p class="text-white/70 mb-6 max-w-md">
+                        The ultimate TikTok video downloader. Download HD videos without watermark for free. Fast, secure, and easy to use.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-lg">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/" class="text-white/70 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="/features" class="text-white/70 hover:text-white transition-colors">Features</a></li>
+                        <li><a href="/about" class="text-white/70 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="/contact" class="text-white/70 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-lg">Legal</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/terms" class="text-white/70 hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="/privacy" class="text-white/70 hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="/contact" class="text-white/70 hover:text-white transition-colors">Help Center</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-white/60 text-sm mb-4 md:mb-0">
+                    © 2024 TIK SAVE. All rights reserved.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="text-white/60 hover:text-white transition-colors">
+                        <i class="ri-twitter-line text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white/60 hover:text-white transition-colors">
+                        <i class="ri-facebook-line text-xl"></i>
+                    </a>
+                    <a href="#" class="text-white/60 hover:text-white transition-colors">
+                        <i class="ri-instagram-line text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+        }
+
+        document.querySelectorAll('.sidebar a').forEach(link => {
+            link.addEventListener('click', () => {
+                toggleSidebar();
+            });
+        });
+    </script>
+</body>
+</html>
